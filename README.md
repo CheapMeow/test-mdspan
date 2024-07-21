@@ -1,5 +1,7 @@
 # test-mdspan
 
+## Different implementation
+
 My first version is to index a one dimension array.
 
 ```cpp
@@ -220,6 +222,10 @@ std::chrono::duration<double> elapsed_time = end_time - start_time;
 
 Here is comparsion result.
 
+## Data Scale
+
+Compiler: MSVC 19.39.33520.0
+
 <table>
     <tr>
         <td align="center">class</td>
@@ -300,3 +306,62 @@ Here is comparsion result.
 </table>
 
 ![](./docs/result.svg)
+
+## Compiler Type
+
+As the answer saying:
+
+[https://www.reddit.com/r/cpp_questions/comments/1e8i8m1/performance_test_for_multiple_dimension_array_and/](https://www.reddit.com/r/cpp_questions/comments/1e8i8m1/performance_test_for_multiple_dimension_array_and/)
+
+I replace all indexing and accessing type to `std::size_t`, add `-march=native` option. Then repeat the test.
+
+```shell
+g++ .\main.cpp -O3 -I3rdparty/mdspan/include -march=native -o main.exe
+```
+
+```shell
+clang++ .\main.cpp -O3 -I3rdparty/mdspan/include -march=native -o main.exe
+```
+
+<table>
+    <tr>
+        <td align="center">class</td>
+        <td colspan="6" align="center">time(s)</td>
+    </tr>
+    <tr>
+        <td align="center">type</td>
+        <td align="center">field3_1dp</td>
+        <td align="center">field3_1dp_t</td>
+        <td align="center">field3_3dp</td>
+        <td align="center">field3_r</td>
+        <td align="center">field3_map</td>
+        <td align="center">field3_mdspan</td>
+    </tr>
+    <tr>
+        <td align="center">msvc</td>
+        <td align="center">6.1776</td>
+        <td align="center">3.916</td>
+        <td align="center">1.37877</td>
+        <td align="center">1.03</td>
+        <td align="center">6.43983</td>
+        <td align="center">6.26672</td>
+    </tr>
+    <tr>
+        <td align="center">g++</td>
+        <td align="center">5.63062</td>
+        <td align="center">4.18603</td>
+        <td align="center">1.12186</td>
+        <td align="center">1.06282</td>
+        <td align="center">5.05098</td>
+        <td align="center">5.11213</td>
+    </tr>
+    <tr>
+        <td align="center">clang++</td>
+        <td align="center">3.14699</td>
+        <td align="center">1.68778</td>
+        <td align="center">1.19851</td>
+        <td align="center">1.13926</td>
+        <td align="center">1.99766</td>
+        <td align="center">1.93895</td>
+    </tr>
+</table>
