@@ -158,7 +158,67 @@ public:
 };
 ```
 
-Here is comparsion.
+Comparsion is conducted on convection funciton, which is widely used in CFD.
+
+Each class have its own funciton due to parameters' type are different. One example is:
+
+```cpp
+// Function to calculate convection term u * ∇u + v * ∇v + w * ∇w
+void calculate_convection_3dp_raw(double***    u,
+                                  double***    v,
+                                  double***    w,
+                                  double***    conv_u,
+                                  double***    conv_v,
+                                  double***    conv_w,
+                                  unsigned int Nx,
+                                  unsigned int Ny,
+                                  unsigned int Nz)
+{
+    for (unsigned int i = 1; i < Nx - 1; ++i)
+    {
+        for (unsigned int j = 1; j < Ny - 1; ++j)
+        {
+            for (unsigned int k = 1; k < Nz - 1; ++k)
+            {
+                double dudx = (u[i + 1][j][k] - u[i - 1][j][k]) / 2.0;
+                double dudy = (u[i][j + 1][k] - u[i][j - 1][k]) / 2.0;
+                double dudz = (u[i][j][k + 1] - u[i][j][k - 1]) / 2.0;
+
+                double dvdx = (v[i + 1][j][k] - v[i - 1][j][k]) / 2.0;
+                double dvdy = (v[i][j + 1][k] - v[i][j - 1][k]) / 2.0;
+                double dvdz = (v[i][j][k + 1] - v[i][j][k - 1]) / 2.0;
+
+                double dwdx = (w[i + 1][j][k] - w[i - 1][j][k]) / 2.0;
+                double dwdy = (w[i][j + 1][k] - w[i][j - 1][k]) / 2.0;
+                double dwdz = (w[i][j][k + 1] - w[i][j][k - 1]) / 2.0;
+
+                conv_u[i][j][k] = u[i][j][k] * dudx + v[i][j][k] * dudy + w[i][j][k] * dudz;
+                conv_v[i][j][k] = u[i][j][k] * dvdx + v[i][j][k] * dvdy + w[i][j][k] * dvdz;
+                conv_w[i][j][k] = u[i][j][k] * dwdx + v[i][j][k] * dwdy + w[i][j][k] * dwdz;
+            }
+        }
+    }
+}
+```
+
+Measurment is:
+
+```cpp
+// Measure the time for 100 iterations of convection calculation
+const int num_iterations = 20;
+auto      start_time     = std::chrono::high_resolution_clock::now();
+
+for (int iter = 0; iter < num_iterations; ++iter)
+{
+    calculate_convection_1dp(u, v, w, conv_u, conv_v, conv_w);
+    std::cout << "iter = " << iter << std::endl;
+}
+
+auto                          end_time     = std::chrono::high_resolution_clock::now();
+std::chrono::duration<double> elapsed_time = end_time - start_time;
+```
+
+Here is comparsion result.
 
 <table>
     <tr>
