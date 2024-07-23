@@ -307,7 +307,7 @@ Compiler: MSVC 19.39.33520.0
 
 ![](./docs/result.svg)
 
-## Compiler Type
+## Platform and Compiler
 
 As the answer saying:
 
@@ -323,13 +323,15 @@ g++ .\main.cpp -O3 -I3rdparty/mdspan/include -march=native -o main.exe
 clang++ .\main.cpp -O3 -I3rdparty/mdspan/include -march=native -o main.exe
 ```
 
+I can get the same result that all implementation are similar when using clang in Linux.
+
 <table>
     <tr>
-        <td align="center">class</td>
+        <td rowspan="2" align="center">platform</td>
+        <td rowspan="2" align="center">complier</td>
         <td colspan="6" align="center">time(s)</td>
     </tr>
     <tr>
-        <td align="center">type</td>
         <td align="center">field3_1dp</td>
         <td align="center">field3_1dp_t</td>
         <td align="center">field3_3dp</td>
@@ -338,6 +340,7 @@ clang++ .\main.cpp -O3 -I3rdparty/mdspan/include -march=native -o main.exe
         <td align="center">field3_mdspan</td>
     </tr>
     <tr>
+        <td rowspan="3" align="center">windows</td>
         <td align="center">msvc</td>
         <td align="center">6.1776</td>
         <td align="center">3.916</td>
@@ -363,5 +366,24 @@ clang++ .\main.cpp -O3 -I3rdparty/mdspan/include -march=native -o main.exe
         <td align="center">1.13926</td>
         <td align="center">1.99766</td>
         <td align="center">1.93895</td>
+    </tr>
+    <tr>
+        <td rowspan="2" align="center">linux</td>
+        <td align="center">g++</td>
+        <td align="center">1.90795</td>
+        <td align="center">1.86067</td>
+        <td align="center">1.42331</td>
+        <td align="center">1.42438</td>
+        <td align="center"> 1.87503</td>
+        <td align="center">1.92114</td>
+    </tr>
+    <tr>
+        <td align="center">clang++</td>
+        <td align="center">1.03195</td>
+        <td align="center">0.96762</td>
+        <td align="center">1.10214</td>
+        <td align="center">1.0981</td>
+        <td align="center">1.04556</td>
+        <td align="center">1.0522</td>
     </tr>
 </table>
